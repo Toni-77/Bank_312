@@ -3,13 +3,15 @@ public class Bank_312_Checking extends Bank_312_Account{
         super(balance);
         setType("Checking");
         assignAccountNo();
+        Bank_312_Accounts_LoansDB.addAccount(this);
     }
     @Override
     public void assignAccountNo() {
         String accountNumber = getRandomNumberString();
         while(!isNnumberUnique(accountNumber))
             accountNumber = getRandomNumberString();
-        setAccountNo("222" + accountNumber);
+        setAccountNo("444" + accountNumber);
     }
 }
+
 

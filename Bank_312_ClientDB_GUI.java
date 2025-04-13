@@ -1,18 +1,15 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 
-public class ClientDB_GUI extends JFrame implements ActionListener {
+public class Bank_312_ClientDB_GUI extends JFrame  {
 
 
-    private ArrayList<Client> currentClientsDB;
-    Transaction_Gui transactionFrame;
+    private ArrayList<Bank_312_Client> currentClientsDB;
+    Bank_312_Transaction_GUI transactionFrame;
     private JPanel showClients;
     private JTable clientTable;
 
@@ -20,12 +17,39 @@ public class ClientDB_GUI extends JFrame implements ActionListener {
     private JLabel lblShowClients;
 
 
-    public ClientDB_GUI(ArrayList<Client> clients){
+    public Bank_312_ClientDB_GUI(ArrayList<Bank_312_Client> bank312Clients){
         setLayout(null);
         setTitle("Client Interaction Frame");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setSize(800, 500);
         setLocationRelativeTo(null);
+
+
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                Bank_312_Welcome_GUI.getSearchCreate().setVisible(true);
+            }
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+        });
 
 
         showClients = new JPanel();
@@ -41,19 +65,15 @@ public class ClientDB_GUI extends JFrame implements ActionListener {
 
 
         String [] columnNames = {"First Name", "Last Name", "Phone Nr", "SSN", "Email", "Address"};
-        //Client client;
-        //ClientDB.populateDB();
-        //client = clients.getFirst();
-        //Object[] data = {client.getFirstName(), client.getLastName(),client.getPhoneNr(),client.getSSN(),client.getEmail(),client.getAddress()};
 
 
-        //ArrayList<Client> clients = ClientDB.getClientDB();
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        ClientDB_GUI currentGui = this;
-        //model.addRow(data);
+        Bank_312_ClientDB_GUI currentGui = this;
+
+
         model.setRowCount(0);
-        for(int i = 0; i < clients.size();i++) {
-            Object [] obj = {clients.get(i).getFirstName(), clients.get(i).getLastName(),clients.get(i).getPhoneNr(),clients.get(i).getSSN(),clients.get(i).getEmail(),clients.get(i).getAddress()};
+        for(int i = 0; i < bank312Clients.size(); i++) {
+            Object [] obj = {bank312Clients.get(i).getFirstName(), bank312Clients.get(i).getLastName(), bank312Clients.get(i).getPhoneNr(), bank312Clients.get(i).getSSN(), bank312Clients.get(i).getEmail(), bank312Clients.get(i).getAddress()};
             model.addRow(obj);
         }
         clientTable = new JTable(model);
@@ -70,14 +90,12 @@ public class ClientDB_GUI extends JFrame implements ActionListener {
                     String SSN = (String) clientTable.getValueAt(row, 3);
                     String email = (String) clientTable.getValueAt(row, 4);
                     String address = (String) clientTable.getValueAt(row, 5);
-                    transactionFrame = new Transaction_Gui(currentGui, clients.get(row));
-                    System.out.println(clients.get(row).getInfo());
+                    transactionFrame = new Bank_312_Transaction_GUI(currentGui, bank312Clients.get(row));
+                    System.out.println(bank312Clients.get(row).getInfo());
                     //Transaction_Gui.setCurrentClient(clients.get(row));
                     transactionFrame.setVisible(true);
 
 
-                   /*JOptionPane.showMessageDialog(ClientDBGui.this,
-                           "Clicked on row: " + row + "\nFirst Name: " + fName + ", Last Name: " + lName + ", Phone: " + phone);*/
                 }
             }
         });
@@ -92,18 +110,8 @@ public class ClientDB_GUI extends JFrame implements ActionListener {
         showClients.add(scrollPane);
 
 
-        //setVisible(true);
-
-
     }
 
 
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-
-    }
 }
 

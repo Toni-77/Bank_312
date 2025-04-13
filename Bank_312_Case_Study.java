@@ -6,7 +6,7 @@ public class Bank_312_Case_Study
    // main method creates and runs the ATM
    public static void main(String[] args)
    {
-	  Welcome_GUI page = new Welcome_GUI();
+	  Bank_312_Welcome_GUI page = new Bank_312_Welcome_GUI();
       /*ATM theATM = ATM.getinstance();
       theATM.run();*/
    } // end main

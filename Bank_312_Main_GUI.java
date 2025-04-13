@@ -7,17 +7,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
+
+
 public class Bank_312_Main_GUI extends JFrame implements ActionListener {
 
 
-
-
-    ArrayList <Client> clientsFound;
-    private ClientDB_GUI clientDBGui;
-    Transaction_Gui clientForm;
+    ArrayList <Bank_312_Client> clientsFound;
+    private Bank_312_ClientDB_GUI clientDBGui;
+    Bank_312_Transaction_GUI clientForm;
     private JPanel searchPannel;
-
-
     private JPanel createPanel;
     private JLabel lblclientSearch;
     private JLabel lblNewClient;
@@ -31,37 +29,23 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
     private JTextField txtSSN;
     private JLabel lblSSN;
     private JButton btnSearch;
-
-
     private JToggleButton switchForms;
-
-
-
-
     private JLabel lblNewClientFirstName;
     private JLabel lblNewClientLastName;
     private JLabel lblNewClientPhoneNr;
     private JLabel lblNewClientSSN;
     private JLabel lblNewClientAddress;
     private JLabel lblNewClientEmail;
-
-
     private JTextField txtNewClientFirstName;
     private JTextField txtNewClientLastName;
     private JTextField txtNewClientPhoneNr;
     private JTextField txtNewClientSSN;
     private JTextField txtNewClientAddress;
     private JTextField txtNewClientEmail;
-
-
     private JButton btnCreateClient;
 
 
-
-
     public Bank_312_Main_GUI(){
-
-
         // Create JFrame and set the size and location
         setLayout(null);
         setTitle("312 Bank");
@@ -93,13 +77,13 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         txtFirstName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                disable(txtLastName,txtPhone,txtSSN);
+                disable(txtPhone,txtSSN);
             }
 
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (txtFirstName.getText().isEmpty()) {
+                if (txtFirstName.getText().isEmpty() && txtLastName.getText().isEmpty()) {
                     enable(txtLastName,txtPhone,txtSSN);
                 }
             }
@@ -111,8 +95,6 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         });
 
 
-
-
         lblLastName =new JLabel("Last Name:");
         lblLastName.setFont(new Font("Arial", Font.BOLD, 18));
         lblLastName.setBounds(50,100,120,30);
@@ -122,14 +104,16 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         txtLastName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                disable(txtFirstName,txtPhone,txtSSN);
+                disable(txtPhone,txtSSN);
             }
+
+
 
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (txtLastName.getText().isEmpty()) {
-                    enable(txtFirstName,txtPhone,txtSSN);
+                if (txtLastName.getText().isEmpty() && txtFirstName.getText().isEmpty()) {
+                    enable(txtPhone,txtSSN);
                 }
             }
 
@@ -204,13 +188,57 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This code will be executed when the button is clicked
-                if(ClientDB.findByFullName(txtFirstName.getText()) != null){
-                    clientsFound = ClientDB.findByFullName(txtFirstName.getText());
+
+
+                if (!txtFirstName.getText().isEmpty() || !txtLastName.getText().isEmpty()) {
+                    String firstName = txtFirstName.getText();
+                    String lastName = txtLastName.getText();
+                    if(Bank_312_Input_Validation.isNameValid(firstName) && Bank_312_Input_Validation.isNameValid(lastName)){
+                        if(Bank_312_ClientDB.findByFullName(firstName, lastName).isEmpty()){
+                            JOptionPane.showMessageDialog(null, "Client not found! Try again!", "Bank 312", JOptionPane.INFORMATION_MESSAGE);
+                        }else{
+                            clientsFound = Bank_312_ClientDB.findByFullName(firstName,lastName);
+                            Bank_312_ClientDB.populateDB(clientsFound);
+                            clientDBGui = new Bank_312_ClientDB_GUI(Bank_312_ClientDB.getSearchedClients());
+                            clientDBGui.setVisible(true);
+                            setVisible(false);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Enter a valid full name", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else if (!txtPhone.getText().isEmpty()) {
+                    String phone = txtPhone.getText();
+                    if(Bank_312_Input_Validation.isPhoneValid(phone)){
+                        if(Bank_312_ClientDB.findByPhone(phone).isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "Client not found! Try again!", "Bank 312", JOptionPane.INFORMATION_MESSAGE);
+                        }  else{
+                            clientsFound = Bank_312_ClientDB.findByPhone(phone);
+                            Bank_312_ClientDB.populateDB(clientsFound);
+                            clientDBGui = new Bank_312_ClientDB_GUI(Bank_312_ClientDB.getSearchedClients());
+                            clientDBGui.setVisible(true);
+                            setVisible(false);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Enter a valid phone number", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+
+                } else if (!txtSSN.getText().isEmpty()) {
+                    String ssn = txtSSN.getText();
+                    if(Bank_312_Input_Validation.isSsnValid(ssn)){
+                        if(Bank_312_ClientDB.findBySSN(ssn).isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "Client not found! Try again!", "Bank 312", JOptionPane.INFORMATION_MESSAGE);
+                        }  else{
+                            clientsFound = Bank_312_ClientDB.findBySSN(ssn);
+                            Bank_312_ClientDB.populateDB(clientsFound);
+                            clientDBGui = new Bank_312_ClientDB_GUI(Bank_312_ClientDB.getSearchedClients());
+                            clientDBGui.setVisible(true);
+                            setVisible(false);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,"Enter a valid SSN", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
-                ClientDB.populateDB(clientsFound);
-                clientDBGui = new ClientDB_GUI(ClientDB.getSearchedClients());
-                clientDBGui.setVisible(true);
-                setVisible(false);
                 clearTxtFields();
             }
         });
@@ -222,11 +250,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         switchForms.addActionListener(this);
 
 
-
-
         // Right side of the frame will contain new client info
-
-
         createPanel = new JPanel();
         createPanel.setBounds(400,0,400,500);
         createPanel.setLayout(null);
@@ -326,17 +350,26 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This code will be executed when the button is clicked
-                Client client = new Client(txtNewClientFirstName.getText(),txtNewClientLastName.getText(),txtNewClientPhoneNr.getText(),txtNewClientSSN.getText(),txtNewClientEmail.getText(),txtNewClientAddress.getText());
-                ClientDB.addClient(client);
-                clientDBGui = new ClientDB_GUI(ClientDB.getClientDB());
-                clientDBGui.setVisible(true);
-                setVisible(false);
-                clearTxtFields();
+                if(!Bank_312_Input_Validation.isNameValid(txtNewClientFirstName.getText()) || !Bank_312_Input_Validation.isNameValid(txtNewClientLastName.getText())){
+                    JOptionPane.showMessageDialog(null,"Enter a valid Name", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    txtNewClientFirstName.setText(null);
+                }else if (!Bank_312_Input_Validation.isPhoneValid(txtNewClientPhoneNr.getText())) {
+                    JOptionPane.showMessageDialog(null,"Enter a valid Phone Number", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    txtNewClientPhoneNr.setText(null);
+                }else if (!Bank_312_Input_Validation.isSsnValid(txtNewClientSSN.getText()) || !Bank_312_Input_Validation.isSsnUnique(txtNewClientSSN.getText())) {
+                    JOptionPane.showMessageDialog(null, "Enter a valid/unique SSN", "Bank 312", JOptionPane.INFORMATION_MESSAGE);
+                    txtNewClientSSN.setText(null);
+                }else {
+                    Bank_312_Client client = new Bank_312_Client(txtNewClientFirstName.getText(),txtNewClientLastName.getText(),txtNewClientPhoneNr.getText(),txtNewClientSSN.getText(),txtNewClientEmail.getText(),txtNewClientAddress.getText());
+                    Bank_312_ClientDB.addClient(client);
+                    clientDBGui = new Bank_312_ClientDB_GUI(Bank_312_ClientDB.getClientDB());
+                    clientDBGui.setVisible(true);
+                    setVisible(false);
+                    clearTxtFields();
+                }
             }
         });
         btnCreateClient.setEnabled(false);
-
-
     }
 
 
@@ -354,25 +387,19 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
     }
 
 
-
-
-    private void enable(JTextField txt1,JTextField txt2,JTextField txt3){
-        txt1.setEnabled(true);
-        txt1.setBackground(null);
-        txt2.setEnabled(true);
-        txt2.setBackground(null);
-        txt3.setEnabled(true);
-        txt3.setBackground(null);
+    private void enable(JTextField... txtFields){
+        for(JTextField txtField:txtFields){
+            txtField.setEnabled(true);
+            txtField.setBackground(Color.WHITE);
+        }
     }
 
 
-    private void disable(JTextField txt1,JTextField txt2,JTextField txt3){
-        txt1.setEnabled(false);
-        txt1.setBackground(Color.LIGHT_GRAY);
-        txt2.setEnabled(false);
-        txt2.setBackground(Color.LIGHT_GRAY);
-        txt3.setEnabled(false);
-        txt3.setBackground(Color.LIGHT_GRAY);
+    private void disable(JTextField... txtFields){
+        for(JTextField txtField:txtFields){
+            txtField.setEnabled(false);
+            txtField.setBackground(Color.LIGHT_GRAY);
+        }
     }
 
 
@@ -395,6 +422,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                     for (Component component2 : createPanel.getComponents()) {
                         component2.setEnabled(true);
                     }
+                    clearTxtFields();
                 }
             } else {
                 switchForms.setText("Create Client");
@@ -404,8 +432,11 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 for (Component component2 : createPanel.getComponents()) {
                     component2.setEnabled(false);
                 }
+                clearTxtFields();
             }
         }
     }
 }
+
+
 

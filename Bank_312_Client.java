@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class Client {
+public class Bank_312_Client {
 
 
     private ArrayList<Bank_312_Account> accounts = new ArrayList<>();
@@ -15,7 +15,7 @@ public class Client {
     private String pin;
 
 
-    public Client(String firstName,String lastName,String phoneNr,String SSN,String email,String address){
+    public Bank_312_Client(String firstName, String lastName, String phoneNr, String SSN, String email, String address){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNr = phoneNr;
@@ -111,9 +111,22 @@ public class Client {
     }
 
 
+    public Bank_312_Account findAccount(String accountNo) {
+        for (Bank_312_Account account : accounts) {
+            if (account.getAccountNumber().equals(accountNo)) {
+                // account found
+                return account;
+            }
+            break;
+        }
+        return null;
+    }
+
+
     public String getInfo(){
         return ( getFirstName() + "," + getLastName() + "," + getPhoneNr() + "," +getSSN()+ "," +getEmail()+ "," +getAddress());
     }
 
-    }
+
+}
 

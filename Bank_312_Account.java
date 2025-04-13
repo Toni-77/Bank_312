@@ -1,12 +1,13 @@
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 
 public abstract class Bank_312_Account {
     // Private field to store the account number
     private String accountNumber;
     private String type;
+
+
+    private List<String> transactionsNo = new ArrayList<>();
 
 
     // Private field to store the balance
@@ -18,24 +19,37 @@ public abstract class Bank_312_Account {
     }
 
 
+    public void addAccountTransaction(String transactionNo){
+        transactionsNo.add(transactionNo);
+    }
+    public List<String> getTransactionsNo(){
+        return transactionsNo;
+    }
     public abstract void assignAccountNo();
     // Method to deposit an amount into the account
-    public void deposit(double amount) {
+    public Boolean deposit(double amount) {
         // Increase the balance by the deposit amount
         balance += amount;
+        return true;
     }
     public void setAccountNo(String accountNo){
         this.accountNumber = accountNo;
     }
     // Method to withdraw an amount from the account
-    public void withdraw(double amount) {
+
+
+
+
+    public Boolean withdraw(double amount) {
         // Check if the balance is sufficient for the withdrawal
         if (balance >= amount) {
             // Decrease the balance by the withdrawal amount
             balance -= amount;
+            return true;
         } else {
             // Print a message if the balance is insufficient
             System.out.println("Insufficient balance");
+            return false;
         }
     }
 

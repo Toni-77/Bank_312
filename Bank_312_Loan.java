@@ -8,8 +8,7 @@ public abstract class Bank_312_Loan {
 
     // Private field to store the balance
     private double loanLimit;
-
-
+    private double paidLoanAmount = 0;
     private double remainingBalance;
     private String loanAccountNumber;
 
@@ -22,14 +21,18 @@ public abstract class Bank_312_Loan {
 
     public Bank_312_Loan(Double loanLimit){
         this.loanLimit =loanLimit;
+        remainingBalance = loanLimit;
     }
     public void payment(double amount) {
-        // Check if the balance is sufficient for the withdrawal
-        if (remainingBalance >= amount) {
-            // Decrease the balance by the withdrawal amount
-            remainingBalance -= amount;
-        } else {
-            // Print a message if the balance is insufficient
+
+
+        // Check if the payment is bigger than the remaining balance
+        if (( remainingBalance) > amount ){
+            paidLoanAmount+= amount;
+            remainingBalance = loanLimit - paidLoanAmount;
+        }
+        else {
+            // Print a message if the balance is insufficient*/
             System.out.println(remainingBalance + " is less than " + amount);
         }
     }
@@ -41,6 +44,11 @@ public abstract class Bank_312_Loan {
 
     public void setLoanAccountNumber(String accountNo){
         loanAccountNumber = accountNo;
+    }
+
+
+    public double getRemainingBalance() {
+        return remainingBalance;
     }
 
 

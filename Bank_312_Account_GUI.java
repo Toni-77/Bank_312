@@ -1,10 +1,12 @@
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 
-public class Account_GUI extends JFrame {
+public class Bank_312_Account_GUI extends JFrame {
 
 
     private JLabel lblGreetings;
@@ -20,7 +22,7 @@ public class Account_GUI extends JFrame {
 
 
     private JLabel lblLoanLimit;
-    private JTextField txtAmount;
+    private JFormattedTextField txtAmount;
 
 
     private JLabel lblCurrentClient;
@@ -28,10 +30,10 @@ public class Account_GUI extends JFrame {
 
 
     private JButton btnAddAccount;
-    Transaction_Gui transcactionGUI;
+    Bank_312_Transaction_GUI transcactionGUI;
 
 
-    public Account_GUI(Transaction_Gui transactionGui) {
+    public Bank_312_Account_GUI(Bank_312_Transaction_GUI transactionGui) {
         transcactionGUI = transactionGui;
         setLayout(null);
         setTitle("Open Account Frame");
@@ -56,9 +58,24 @@ public class Account_GUI extends JFrame {
         accountType = new JComboBox<>(accountOptions);
         accountType.setBounds(250, 200,80,30);
         add(accountType);
+        accountType.addActionListener(e -> {
+            String selectedItem = (String) accountType.getSelectedItem();
+            if(selectedItem.equals("Credit Card") || selectedItem.equals("Car Loan") || selectedItem.equals("Mortgage")){
+                lblAmount.setVisible(false);
+                lblLoanLimit.setVisible(true);
+            }
+            else{
+                lblLoanLimit.setVisible(false);
+                lblAmount.setVisible(true);
+            }
+        });
 
 
-        txtAmount = new JTextField();
+        DecimalFormat decimalFormat = new DecimalFormat("#.00"); // Format to allow up to 2 decimal places
+        NumberFormatter numberFormatter = new NumberFormatter(decimalFormat);
+        numberFormatter.setValueClass(Double.class); // Allow only Double values
+        numberFormatter.setAllowsInvalid(false); // Prevent invalid input
+        txtAmount = new JFormattedTextField(numberFormatter);
         txtAmount.setBounds(600, 200,80,30);
         add(txtAmount);
 
@@ -72,7 +89,8 @@ public class Account_GUI extends JFrame {
         lblLoanLimit = new JLabel("Enter Loan/CC Limit:");
         lblLoanLimit.setFont(new Font("Arial", Font.BOLD, 18));
         lblLoanLimit.setBounds(400, 200,200,30);
-        //add(lblLoanLimit);
+        add(lblLoanLimit);
+        lblLoanLimit.setVisible(false);
 
 
         lblCurrentClient = new JLabel("Client in session:");
@@ -81,7 +99,7 @@ public class Account_GUI extends JFrame {
         add(lblCurrentClient);
 
 
-        lblClient = new JLabel(Transaction_Gui.getCurrentClient().getFirstName() + " " + Transaction_Gui.getCurrentClient().getLastName());
+        lblClient = new JLabel(Bank_312_Transaction_GUI.getCurrentClient().getFirstName() + " " + Bank_312_Transaction_GUI.getCurrentClient().getLastName());
         lblClient.setFont(new Font("Arial", Font.BOLD, 18));
         lblClient.setForeground(Color.BLUE);
         lblClient.setBounds(440,110,240,30);
@@ -102,16 +120,24 @@ public class Account_GUI extends JFrame {
 
                 if(accountType.getSelectedItem().toString().equals("Checking")) {
                     Bank_312_Account account = new Bank_312_Checking(Double.parseDouble(txtAmount.getText()));
-                    Transaction_Gui.getCurrentClient().addAccount(account);
+                    Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
                     transcactionGUI.updateTable(account);
                 } else if (accountType.getSelectedItem().toString().equals("Savings")) {
                     Bank_312_Account account = new Bank_312_Savings(Double.parseDouble(txtAmount.getText()));
-                    Transaction_Gui.getCurrentClient().addAccount(account);
+                    Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
                     transcactionGUI.updateTable(account);
                 } else if (accountType.getSelectedItem().toString().equals("Credit Card")) {
                     Bank_312_Loan loan = new Bank_312_CC(Double.parseDouble(txtAmount.getText()));
-                    Transaction_Gui.getCurrentClient().addLoanAccount(loan);
-                    //transcactionGUI.updateTable(loan);
+                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                    transcactionGUI.updateTable(loan);
+                } else if (accountType.getSelectedItem().toString().equals("Car Loan")) {
+                    Bank_312_Loan loan = new Bank_312_Car_Loan(Double.parseDouble(txtAmount.getText()));
+                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                    transcactionGUI.updateTable(loan);
+                } else if (accountType.getSelectedItem().toString().equals("Mortgage")) {
+                    Bank_312_Loan loan = new Bank_312_Mortgage(Double.parseDouble(txtAmount.getText()));
+                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                    transcactionGUI.updateTable(loan);
                 }
                /*Transaction_Gui.getCurrentClient().addAccount(account);
                transcactionGUI.updateTable(account);*/
@@ -127,7 +153,7 @@ public class Account_GUI extends JFrame {
 
     }
     public boolean addAccount(Bank_312_Account account){
-        Transaction_Gui.getCurrentClient().addAccount(account);
+        Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
         return true;
     }
 }

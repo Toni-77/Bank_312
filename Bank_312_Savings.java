@@ -3,6 +3,7 @@ public class Bank_312_Savings extends Bank_312_Account{
         super(balance);
         setType("Savings");
         assignAccountNo();
+        Bank_312_Accounts_LoansDB.addAccount(this);
     }
 
 
@@ -11,17 +12,20 @@ public class Bank_312_Savings extends Bank_312_Account{
         String accountNumber = getRandomNumberString();
         while(!isNnumberUnique(accountNumber))
             accountNumber = getRandomNumberString();
-        setAccountNo("222" + accountNumber);
+        setAccountNo("555" + accountNumber);
+
+
     }
     @Override
-    public void withdraw(double amount) {
+    public Boolean withdraw(double amount) {
         // Check if the withdrawal would cause the balance to drop below $100
         if (getBalance() - amount < 100) {
             // Print a message if the minimum balance requirement is not met
             System.out.println("Minimum balance of $100 required!");
+            return false;
         } else {
             // Call the parent class withdraw method
-            super.withdraw(amount);
+            return super.withdraw(amount);
         }
     }
 }

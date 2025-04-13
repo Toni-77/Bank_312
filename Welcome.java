@@ -63,7 +63,7 @@ public class Welcome extends JFrame implements ActionListener {
             if ((txtUserName.getText().equals("u")) && (String.valueOf(txtPassword.getPassword()).equals("p")) )
             {
                 lblInfo.setText("Hi from button log in");
-                new Bank_312_Main_Application().setVisible(true);
+                new Bank_312_Main_GUI().setVisible(true);
                 setVisible(false);
             }
             else {
