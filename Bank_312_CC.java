@@ -1,3 +1,6 @@
+// this class extends the abstract loan class with a
+// prefix (111) at the beginning of the account number
+
 public class Bank_312_CC extends Bank_312_Loan{
     public Bank_312_CC(Double loanLimit){
         super(loanLimit);

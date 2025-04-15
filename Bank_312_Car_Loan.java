@@ -1,3 +1,5 @@
+// this class extends the abstract loan class with a
+// prefix (222) at the beginning of the account number
 public class Bank_312_Car_Loan extends Bank_312_Loan{
 
 

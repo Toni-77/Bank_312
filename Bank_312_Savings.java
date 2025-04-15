@@ -1,3 +1,5 @@
+// This class creates savings objects
+
 public class Bank_312_Savings extends Bank_312_Account{
     public Bank_312_Savings(Double balance){
         super(balance);
@@ -6,7 +8,8 @@ public class Bank_312_Savings extends Bank_312_Account{
         Bank_312_Accounts_LoansDB.addAccount(this);
     }
 
-
+    // Method to assign a random 9 digit number with
+    // a fixed 3 digit prefix to an account
     @Override
     public void assignAccountNo() {
         String accountNumber = getRandomNumberString();
@@ -19,13 +22,14 @@ public class Bank_312_Savings extends Bank_312_Account{
     @Override
     public Boolean withdraw(double amount) {
         // Check if the withdrawal would cause the balance to drop below $100
-        if (getBalance() - amount < 100) {
+        // or the amount is not a positive number greater than (zero) 0
+        if (amount > 0 && (getBalance() - amount) >= 100) {
             // Print a message if the minimum balance requirement is not met
             System.out.println("Minimum balance of $100 required!");
-            return false;
-        } else {
-            // Call the parent class withdraw method
             return super.withdraw(amount);
+        } else {
+            // return false if amount is negative or leaves less than 100 in the account
+            return false;
         }
     }
 }

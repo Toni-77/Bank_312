@@ -1,3 +1,5 @@
+// This class creates mortgage objects
+
 public class Bank_312_Mortgage extends Bank_312_Loan{
 
 
@@ -7,6 +9,8 @@ public class Bank_312_Mortgage extends Bank_312_Loan{
         assignLoanNo();
         Bank_312_Accounts_LoansDB.addLoan(this);
     }
+    // Method to assign a random 9 digit number with
+    // a fixed 3 digit prefix
     @Override
     public void assignLoanNo() {
         String accountNumber = getRandomNumberString();

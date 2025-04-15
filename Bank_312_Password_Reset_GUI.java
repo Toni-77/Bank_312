@@ -4,7 +4,8 @@ import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+// This JFrame will help users who forgot their passwords
+// by asking for a email address
 
 public class Bank_312_Password_Reset_GUI extends JFrame {
     private JLabel lblMainMessage;

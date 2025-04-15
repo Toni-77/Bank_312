@@ -6,15 +6,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+// This JFame has a form that will search for existing clients using
+// 1)first name and last name or
+// 2)phone number only or
+// 3)social security number only
 
-
+// And another form that will  create a new Client using
+// 1) First and last name    - mandatory not unique
+// 2) Phone number           - mandatory not unique
+// 3) social security number - mandatory unique
 
 public class Bank_312_Main_GUI extends JFrame implements ActionListener {
 
 
-    ArrayList <Bank_312_Client> clientsFound;
-    private Bank_312_ClientDB_GUI clientDBGui;
-    Bank_312_Transaction_GUI clientForm;
+    private ArrayList <Bank_312_Client> clientsFound; // list of clients returned from the search for a client
+    private Bank_312_ClientDB_GUI clientDBGui; // the GUI frame that displays the find/search clients table
+    Bank_312_Transaction_GUI clientForm; // this frame was intended to show all bank transactions
     private JPanel searchPannel;
     private JPanel createPanel;
     private JLabel lblclientSearch;
@@ -53,19 +60,16 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         setSize(800, 500);
         setLocationRelativeTo(null);
 
-
+        // Left side of the frame will contain existing client search info
         searchPannel = new JPanel();
         searchPannel.setBounds(0,0,400,300);
         searchPannel.setLayout(null);
         add(searchPannel);
 
-
-        // Left side of the frame will contain existing client search info
         lblclientSearch = new JLabel("Search for the Client");
         lblclientSearch.setFont(new Font("Arial", Font.BOLD, 18));
         lblclientSearch.setBounds(90,5,250,30);
         searchPannel.add(lblclientSearch);
-
 
         lblFirstName = new JLabel("First Name:");
         lblFirstName.setFont(new Font("Arial", Font.BOLD, 18));
@@ -74,6 +78,8 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         txtFirstName = new JTextField();
         txtFirstName.setBounds(160,50,150,30);
         searchPannel.add(txtFirstName);
+
+        // the text boxes will get able/disabled if they have text typed on them
         txtFirstName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -88,12 +94,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 }
             }
 
-
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
-
 
         lblLastName =new JLabel("Last Name:");
         lblLastName.setFont(new Font("Arial", Font.BOLD, 18));
@@ -107,9 +111,6 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 disable(txtPhone,txtSSN);
             }
 
-
-
-
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (txtLastName.getText().isEmpty() && txtFirstName.getText().isEmpty()) {
@@ -117,12 +118,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 }
             }
 
-
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
-
 
         searchPannel.add(txtLastName);
         lblPhoneNr = new JLabel("Phone No:");
@@ -146,12 +145,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 }
             }
 
-
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
-
 
         lblSSN = new JLabel("SSN:");
         lblSSN.setFont(new Font("Arial", Font.BOLD, 18));
@@ -166,7 +163,6 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 disable(txtFirstName,txtLastName,txtPhone);
             }
 
-
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if (txtSSN.getText().isEmpty()) {
@@ -174,13 +170,12 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                 }
             }
 
-
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
 
-
+        // button that will show the find client if clicked
         btnSearch = new JButton("Search");
         btnSearch.setBounds(220,250,90,30);
         searchPannel.add(btnSearch);
@@ -188,8 +183,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This code will be executed when the button is clicked
-
-
+                // It will search by (first name + last name, phone no, or SSN)
                 if (!txtFirstName.getText().isEmpty() || !txtLastName.getText().isEmpty()) {
                     String firstName = txtFirstName.getText();
                     String lastName = txtLastName.getText();
@@ -221,8 +215,6 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
                     } else {
                         JOptionPane.showMessageDialog(null,"Enter a valid phone number", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
                     }
-
-
                 } else if (!txtSSN.getText().isEmpty()) {
                     String ssn = txtSSN.getText();
                     if(Bank_312_Input_Validation.isSsnValid(ssn)){
@@ -243,7 +235,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
             }
         });
 
-
+        // this button will enable/disable between search and create panels(info forms)
         switchForms = new JToggleButton("Switch to Create Client");
         switchForms.setBounds(150,350, 180,30);
         add(switchForms);
@@ -256,13 +248,11 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.setLayout(null);
         add(createPanel);
 
-
         lblNewClient = new JLabel("Create New Client");
         lblNewClient.setFont(new Font("Arial", Font.BOLD, 18));
         lblNewClient.setBounds(90,5,250,30);
         createPanel.add(lblNewClient);
         lblNewClient.setEnabled(false);
-
 
         lblNewClientFirstName = new JLabel("First Name:");
         lblNewClientFirstName.setFont(new Font("Arial", Font.BOLD, 18));
@@ -270,13 +260,11 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientFirstName);
         lblNewClientFirstName.setEnabled(false);
 
-
         txtNewClientFirstName = new JTextField();
         txtNewClientFirstName.setBounds(170,50,150,30);
         createPanel.add(txtNewClientFirstName);
         txtNewClientFirstName.setEnabled(false);
         txtNewClientFirstName.setEnabled(false);
-
 
         lblNewClientLastName = new JLabel("Last Name:");
         lblNewClientLastName.setFont(new Font("Arial", Font.BOLD, 18));
@@ -284,12 +272,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientLastName);
         lblNewClientLastName.setEnabled(false);
 
-
         txtNewClientLastName = new JTextField();
         txtNewClientLastName.setBounds(170,100,150,30);
         createPanel.add(txtNewClientLastName);
         txtNewClientLastName.setEnabled(false);
-
 
         lblNewClientPhoneNr = new JLabel("Phone No:");
         lblNewClientPhoneNr.setFont(new Font("Arial", Font.BOLD, 18));
@@ -297,12 +283,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientPhoneNr);
         lblNewClientPhoneNr.setEnabled(false);
 
-
         txtNewClientPhoneNr = new JTextField();
         txtNewClientPhoneNr.setBounds(170,150,150,30);
         createPanel.add(txtNewClientPhoneNr);
         txtNewClientPhoneNr.setEnabled(false);
-
 
         lblNewClientSSN = new JLabel("SSN:");
         lblNewClientSSN.setFont(new Font("Arial", Font.BOLD, 18));
@@ -310,12 +294,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientSSN);
         lblNewClientSSN.setEnabled(false);
 
-
         txtNewClientSSN = new JTextField();
         txtNewClientSSN.setBounds(170,200,150,30);
         createPanel.add(txtNewClientSSN);
         txtNewClientSSN.setEnabled(false);
-
 
         lblNewClientAddress = new JLabel("Address:");
         lblNewClientAddress.setFont(new Font("Arial", Font.BOLD, 18));
@@ -323,12 +305,10 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientAddress);
         lblNewClientAddress.setEnabled(false);
 
-
         txtNewClientAddress = new JTextField();
         txtNewClientAddress.setBounds(170,250,150,30);
         createPanel.add(txtNewClientAddress);
         txtNewClientAddress.setEnabled(false);
-
 
         lblNewClientEmail = new JLabel("Email:");
         lblNewClientEmail.setFont(new Font("Arial", Font.BOLD, 18));
@@ -336,13 +316,13 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         createPanel.add(lblNewClientEmail);
         lblNewClientEmail.setEnabled(false);
 
-
         txtNewClientEmail = new JTextField();
         txtNewClientEmail.setBounds(170,300,150,30);
         createPanel.add(txtNewClientEmail);
         txtNewClientEmail.setEnabled(false);
 
-
+        // This button will create a new client only if the SSN is not already in use
+        // all text box information will be checked for entering information in correct format
         btnCreateClient = new JButton("Create Client");
         btnCreateClient.setBounds(210,350,110,30);
         createPanel.add(btnCreateClient);
@@ -372,7 +352,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         btnCreateClient.setEnabled(false);
     }
 
-
+    // This method will clear all text fields previous text (if any)
     private void clearTxtFields(){
         txtFirstName.setText(null);
         txtLastName.setText(null);
@@ -386,7 +366,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         txtNewClientAddress.setText(null);
     }
 
-
+    // This method will enable text boxes on either Search or Create
     private void enable(JTextField... txtFields){
         for(JTextField txtField:txtFields){
             txtField.setEnabled(true);
@@ -394,7 +374,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         }
     }
 
-
+    // This method will disable text boxes on either Search or Create
     private void disable(JTextField... txtFields){
         for(JTextField txtField:txtFields){
             txtField.setEnabled(false);
@@ -411,7 +391,7 @@ public class Bank_312_Main_GUI extends JFrame implements ActionListener {
         g.drawLine(x, y1, x, y2);
     }
 
-
+    // this method will listen for button Switch to enable/disable panels
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == switchForms) {

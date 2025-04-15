@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-
+// This class serves as a database for clients
+// including finding
 
 public class Bank_312_ClientDB {
     private static ArrayList<Bank_312_Client> clientsDB = new ArrayList<>();
@@ -8,30 +9,26 @@ public class Bank_312_ClientDB {
 
     private static ArrayList<Bank_312_Client> searchedBank312Clients = new ArrayList<>();
 
-
-    //private JFrame clientGui = new ClientDBGui();
-
-
+    // Method to add a new client to the List of clients
+    // only if the SSN is not already in use by a different client
     public static boolean addClient(Bank_312_Client newBank312Client){
-       /*for (Client existingClient: clientDB){
-           if(existingClient.getSSN().equals(newClient.getSSN()))
-               JOptionPane.showMessageDialog(clientGui, "Duplicate SSN!",
-                       "SSN Checker", JOptionPane.ERROR_MESSAGE);
-       return false;
-       }*/
+       for (Bank_312_Client existingClient: Bank_312_ClientDB.getClientDB()){
+           if(existingClient.getSSN().equals(newBank312Client.getSSN()))
+            return false;
+       }
         clientsDB.add(newBank312Client);
         return true;
     }
 
-
+    // method to return an Arraylist of all clients
     public static ArrayList<Bank_312_Client> getClientDB(){
         return clientsDB;
     }
 
-
+    // Method returns a ArrayList of searchedClients to be passed on the ClientDB_GUI JFrame
     public static ArrayList<Bank_312_Client> getSearchedClients(){return searchedBank312Clients;}
 
-
+    // Populates the database with some existing clients
     public static void populateDB(){
         Bank_312_Client t = new Bank_312_Client("Toni","Dede","4142417481", "342223456","toni@gmail.com", "123 Main st");
         t.addAccount(new Bank_312_Checking(5000));
@@ -49,16 +46,14 @@ public class Bank_312_ClientDB {
         Bank_312_Client c = new Bank_312_Client("Mike", "Ding", "847455656","235679785","ding@gmail.com","29 N Ridge blvd");
         c.addAccount(new Bank_312_Savings(15000.0));
         clientsDB.add(c);
-
-
     }
 
-
+    // Method overloaded to create a list after the search for a client
     public static void populateDB(ArrayList <Bank_312_Client> bank312Clients){
         searchedBank312Clients = bank312Clients;
     }
 
-
+    // Method to find the client by the full name
     public static ArrayList <Bank_312_Client> findByFullName(String firstName, String lastName){
         Iterator <Bank_312_Client>iterator = clientsDB.iterator();
         ArrayList<Bank_312_Client> bank312Clients = new ArrayList<>();
@@ -69,11 +64,10 @@ public class Bank_312_ClientDB {
             }
         }
         return bank312Clients;
-
-
     }
 
-
+    // Method to find client by social security number
+    // Doesn't allow more than one client per SSN
     public static ArrayList<Bank_312_Client> findBySSN(String ssn){
         Iterator <Bank_312_Client>iterator = clientsDB.iterator();
         ArrayList<Bank_312_Client> bank312Clients = new ArrayList<>();
@@ -86,6 +80,8 @@ public class Bank_312_ClientDB {
         }
         return bank312Clients;
     }
+
+    // Method to find client by phone number
     //allows more than one client per phone number
     public static ArrayList<Bank_312_Client> findByPhone(String phone){
         Iterator <Bank_312_Client>iterator = clientsDB.iterator();
@@ -99,7 +95,8 @@ public class Bank_312_ClientDB {
         return bank312Clients;
     }
 
-
+    // Method to find client by email
+    // not used in this project
     public static ArrayList<Bank_312_Client> findByEmail(String email){
         Iterator <Bank_312_Client>iterator = clientsDB.iterator();
         ArrayList<Bank_312_Client> bank312Clients = new ArrayList<>();

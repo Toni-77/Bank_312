@@ -1,16 +1,18 @@
 import java.util.ArrayList;
 import java.util.List;
-
+// This class will serve as a database of employees
+// it comes with some existing employees added in it
 
 public class Bank_312_EmployeesDB {
+    // list of employees;
     public static List<Bank_312_Employee> employees = new ArrayList<>();
 
-
+    // Method to add employee to list
     public static void addEmployee(Bank_312_Employee employee){
         employees.add(employee);
     }
 
-
+    // Method to find employee by username and password
     public static boolean  findEmployee(String userName, String password){
         for(Bank_312_Employee employee:employees){
             if(employee.getUserName().equals(userName) && employee.getPassword().equals(password)){
