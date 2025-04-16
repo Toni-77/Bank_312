@@ -75,7 +75,7 @@ public class ATM
 	   
 	   authenticate check = new authenticate();
   	   screen.Mainframe.revalidate();
-  	 screen.Inputfield2.setText("");
+  	   screen.Inputfield2.setText("");
   	   keypad.setbuttons();
   	   addkeypadlisteners();
   	 
