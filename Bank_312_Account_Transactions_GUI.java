@@ -3,9 +3,13 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 
+// This JFrame will show all the transactions from the chosen account/loan
+// of the client in session from the JTable
 public class Bank_312_Account_Transactions_GUI extends JFrame {
     private JTable transactionsSummary;
     private  DefaultTableModel model;
+
+
     public Bank_312_Account_Transactions_GUI(String chosenAccount){
         setLayout(null);
         setTitle("Transactions Frame");
@@ -26,10 +30,8 @@ public class Bank_312_Account_Transactions_GUI extends JFrame {
         model.setRowCount(0);
 
 
-
-
         for(int i = 0; i < transactions.size();i++) {
-            Object [] obj = {transactions.get(i).getSerialNo(), transactions.get(i).getAccountNo(),transactions.get(i).getTransactionType(), transactions.get(i).getAmount(),transactions.get(i).getDate()};
+            Object [] obj = {transactions.get(i).getSerialNo(), transactions.get(i).getAccountNo(),transactions.get(i).getTransactionType(),String.format( "%.2f", transactions.get(i).getAmount()),transactions.get(i).getDate()};
             model.addRow(obj);
         }
 
@@ -47,10 +49,9 @@ public class Bank_312_Account_Transactions_GUI extends JFrame {
     }
 
 
-    public void findTransactions(ArrayList<Bank_312_Transaction> transactions){
-
-
-    }
 }
+
+
+
 
 

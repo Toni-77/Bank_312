@@ -1,3 +1,6 @@
+// this class extends the abstract loan class with a
+// prefix (444) at the beginning of the account number
+
 public class Bank_312_Checking extends Bank_312_Account{
     public Bank_312_Checking(double balance){
         super(balance);
@@ -12,6 +15,13 @@ public class Bank_312_Checking extends Bank_312_Account{
             accountNumber = getRandomNumberString();
         setAccountNo("444" + accountNumber);
     }
+
+
+
+
 }
+
+
+
 
 

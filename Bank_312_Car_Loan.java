@@ -1,5 +1,6 @@
+// this class extends the abstract loan class with a
+// prefix (222) at the beginning of the account number
 public class Bank_312_Car_Loan extends Bank_312_Loan{
-
 
     public Bank_312_Car_Loan(Double loanTotal){
         super(loanTotal);
@@ -15,4 +16,6 @@ public class Bank_312_Car_Loan extends Bank_312_Loan{
         setLoanAccountNo("222" + accountNumber);
     }
 }
+
+
 

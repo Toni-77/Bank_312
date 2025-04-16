@@ -6,33 +6,23 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 
+// This JFrame will process different transaction of various accounts/loans
 public class Bank_312_Account_GUI extends JFrame {
 
 
     private JLabel lblGreetings;
-
-
     private JLabel lblAcountType;
-
-
     private JComboBox accountType;
-
-
     private JLabel lblAmount;
-
-
     private JLabel lblLoanLimit;
     private JFormattedTextField txtAmount;
-
-
     private JLabel lblCurrentClient;
     private JLabel lblClient;
-
-
     private JButton btnAddAccount;
     Bank_312_Transaction_GUI transcactionGUI;
 
 
+    // The constructor receives a Bank_312_Transaction_GUI to create an object
     public Bank_312_Account_GUI(Bank_312_Transaction_GUI transactionGui) {
         transcactionGUI = transactionGui;
         setLayout(null);
@@ -71,6 +61,7 @@ public class Bank_312_Account_GUI extends JFrame {
         });
 
 
+        // This code is used to format the amount input in numbers with 2 decimal places
         DecimalFormat decimalFormat = new DecimalFormat("#.00"); // Format to allow up to 2 decimal places
         NumberFormatter numberFormatter = new NumberFormatter(decimalFormat);
         numberFormatter.setValueClass(Double.class); // Allow only Double values
@@ -112,49 +103,56 @@ public class Bank_312_Account_GUI extends JFrame {
         add(btnAddAccount);
 
 
+        // This button will add a chosen account/loan to the client in session
+        // only if the amount entered is greater than, orA equal to (zero) 0.
         btnAddAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This code will be executed when the button is clicked
-
-
-                if(accountType.getSelectedItem().toString().equals("Checking")) {
-                    Bank_312_Account account = new Bank_312_Checking(Double.parseDouble(txtAmount.getText()));
-                    Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
-                    transcactionGUI.updateTable(account);
-                } else if (accountType.getSelectedItem().toString().equals("Savings")) {
-                    Bank_312_Account account = new Bank_312_Savings(Double.parseDouble(txtAmount.getText()));
-                    Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
-                    transcactionGUI.updateTable(account);
-                } else if (accountType.getSelectedItem().toString().equals("Credit Card")) {
-                    Bank_312_Loan loan = new Bank_312_CC(Double.parseDouble(txtAmount.getText()));
-                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
-                    transcactionGUI.updateTable(loan);
-                } else if (accountType.getSelectedItem().toString().equals("Car Loan")) {
-                    Bank_312_Loan loan = new Bank_312_Car_Loan(Double.parseDouble(txtAmount.getText()));
-                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
-                    transcactionGUI.updateTable(loan);
-                } else if (accountType.getSelectedItem().toString().equals("Mortgage")) {
-                    Bank_312_Loan loan = new Bank_312_Mortgage(Double.parseDouble(txtAmount.getText()));
-                    Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
-                    transcactionGUI.updateTable(loan);
+                // and will create the chosen account/loan type with the typed amount
+                // update the JTable in the Transaction_GUI JFrame
+                // and also update the TransactionsDB
+                Bank_312_Account account;
+                Bank_312_Loan loan;
+                Double amount = Double.parseDouble(txtAmount.getText());
+                String selectedItem = (String) accountType.getSelectedItem();
+                if (amount > 0){
+                    if(selectedItem.equals("Checking")) {
+                        account = new Bank_312_Checking(amount);
+                        Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
+                        Bank_312_TransactionsDB.addTransaction(new Bank_312_Transaction(account.getAccountNumber(), "Open account",amount));
+                        transcactionGUI.updateTable(account);
+                    } else if (selectedItem.equals("Savings")) {
+                        account = new Bank_312_Savings(amount);
+                        Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
+                        Bank_312_TransactionsDB.addTransaction(new Bank_312_Transaction(account.getAccountNumber(), "Open account",amount));
+                        transcactionGUI.updateTable(account);
+                    } else if (selectedItem.equals("Credit Card")) {
+                        loan = new Bank_312_CC(amount);
+                        Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                        Bank_312_TransactionsDB.addTransaction(new Bank_312_Transaction(loan.getLoanAccountNumber(), "Open CC Loan",amount));
+                        transcactionGUI.updateTable(loan);
+                    } else if (selectedItem.equals("Car Loan")) {
+                        loan = new Bank_312_Car_Loan(amount);
+                        Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                        Bank_312_TransactionsDB.addTransaction(new Bank_312_Transaction(loan.getLoanAccountNumber(), "Open Car Loan",amount));
+                        transcactionGUI.updateTable(loan);
+                    } else if (selectedItem.equals("Mortgage")) {
+                        loan = new Bank_312_Mortgage(amount);
+                        Bank_312_Transaction_GUI.getCurrentClient().addLoanAccount(loan);
+                        Bank_312_TransactionsDB.addTransaction(new Bank_312_Transaction(loan.getLoanAccountNumber(), "Open Mortgage",amount));
+                        transcactionGUI.updateTable(loan);
+                    }
+                    setVisible(false);
+                    transactionGui.setVisible(true);
+                }else {
+                    JOptionPane.showMessageDialog(null,"Negative amount", "Bank 312",JOptionPane.INFORMATION_MESSAGE);
+                    txtAmount.setValue(null);
                 }
-               /*Transaction_Gui.getCurrentClient().addAccount(account);
-               transcactionGUI.updateTable(account);*/
-                setVisible(false);
-                transactionGui.setVisible(true);
-                //clientDBGui.dispose();
-                //Welcome_GUI.getSearchCreate().setVisible(true);
             }
         });
-
-
-
-
-    }
-    public boolean addAccount(Bank_312_Account account){
-        Bank_312_Transaction_GUI.getCurrentClient().addAccount(account);
-        return true;
     }
 }
+
+
 
